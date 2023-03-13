@@ -1,52 +1,31 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <!-- Load the Paper.js library -->
+    <script type="text/javascript" src="js/paper.js"></script>
+    <!-- Define inlined PaperScript associate it with myCanvas -->
+    <script type="text/paperscript" canvas="myCanvas">
+            var myPath;
 
-<head>
-  <script type="text/javascript" src="js/paper.js"></script>
-  <script type="text/javascript">
-    paper.install(window);
-    // Keep global references to both tools, so the HTML
-    // links below can access them.
-    var tool1, tool2;
-
-    window.onload = function () {
-      paper.setup('myCanvas');
-
-      // Create two drawing tools.
-      // tool1 will draw straight lines,
-      // tool2 will draw clouds.
-
-      // Both share the mouseDown event:
-      var path;
-      function onMouseDown(event) {
-        path = new Path();
-        path.strokeColor = 'black';
-        path.add(event.point);
+            function onMouseDown(event) {
+      	    myPath = new Path();
+      	    myPath.strokeColor = 'black';
       }
 
-      tool1 = new Tool();
-      tool1.onMouseDown = onMouseDown;
-
-      tool1.onMouseDrag = function (event) {
-        path.add(event.point);
+      function onMouseDrag(event) {
+      	myPath.add(event.point);
       }
-
-      tool2 = new Tool();
-      tool2.minDistance = 20;
-      tool2.onMouseDown = onMouseDown;
-
-      tool2.onMouseDrag = function (event) {
-        // Use the arcTo command to draw cloudy lines
-        path.arcTo(event.point);
+ <! -- modification/add new features: add rounded pink rectangle w/ each mouse drag --> 
+      function onMouseUp(event) {
+      	var rectangle = new Rectangle(new Point(event.point, event.point), new Point(30, 30));
+      	var radius = new Size(5, 5);
+      	var path = new Path.Rectangle(rectangle, radius);
+      	path.fillColor = 'pink';
+      	path.selected = true;
       }
-    }
-  </script>
-</head>
-
-<body>
-  <a href="#" onclick="tool1.activate();">Lines</a>
-  <a href="#" onclick="tool2.activate();">Clouds</a>
-  <canvas id="myCanvas" resize></canvas>
-</body>
-
+    </script>
+  </head>
+  <body>
+    <canvas id="myCanvas" resize></canvas>
+  </body>
 </html>
